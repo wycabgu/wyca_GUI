@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Wyca API test - Robot</title>
+
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700&#038;subset=latin&#038;ver=1455269554' type='text/css' media='all' rel='stylesheet' id='anaglyph-google-fonts-anaglyph_config-css' />
+	<link href="css/font-awesome.min.css" rel="stylesheet">
+
+
+	<link href="https://www.wyca-solutions.com/API/css/map_wyca.css" rel="stylesheet">
+    <script src="https://www.wyca-solutions.com/API/extern/jquery-1.11.3.min.js"></script>
+	<script src="extern/roslib.js"></script>
+    <script src="https://www.wyca-solutions.com/API/webrtc.wyca2.min.js"></script>
+    <script src="https://www.wyca-solutions.com/API/wyca_api.latest.min.php?id_site=34&api_key=rFerfgt16sfSVEfs6w18sdvsrWSXQSFQv6165wsf"></script>
+    
+    <script src="https://www.wyca-solutions.com/demo_bgu/js/bootstrap.js"></script>
+    
+    <style>
+	body { text-align:center; }
+	#logo_bgu { max-height:200px; position:absolute; top:30px; left:30px; }
+	#logo_wyca { max-height:200px; position:absolute; top:30px; right:30px; }
+	
+	h1 { margin-top:100px; margin-bottom:70px; }
+	
+	.btn-big { display:block; padding-top:20px; padding-bottom:20px; margin-top:30px; font-size:24px; }
+	.btn-big i { display:block; font-size:50px; margin-bottom:20px; }
+	
+	.full-screen { height:100vh; margin:0; padding:0; text-align:center; } 
+	.full-screen .notvisible { height:100%; display:inline-block; vertical-align:middle; }     
+	.full-screen .message { display:inline-block; vertical-align:middle; font-size:50px; }
+	.full-screen.popup { position:fixed; left:0; top:0; width:100%; z-index:10000; background-color:rgba(255,255,255,0.8); display:none; }
+	
+	iframe { width:90%; height:90vh; }
+	
+	.bClose { position:absolute; top:20px; right:20px; font-size:50px; }
+	
+	#robotInfos { position:absolute; bottom:30px; left:30px; }
+		
+	.battery-ok{ color:#6cb877; margin-right:10px; }
+	.battery-ko{ color:#cc0000; margin-right:10px; }
+	.battery-mid{ color:#d78e54; margin-right:10px; }
+	.blinking{ animation: blinkeffect 1s linear infinite; }
+	
+	@keyframes blinkeffect {
+		0% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0.3;
+		}
+	}
+
+	
+	</style>
+    
+    <script>
+	var wycaApi;
+	var in_visio = false;
+	$(document).ready(function(e) {
+        
+		wycaApi = new WycaAPI({
+			api_key:'rFerfgt16sfSVEfs6w18sdvsrWSXQSFQv6165wsf',
+			id_site:'34',
+			id_robot:'50',
+			video_element_id:'webcam_local',
+			nick:'robot_50',
+			delay_no_reply : 30,
+			delay_lost_connexion : 30,
+			with_audio: false,
+			with_video: true,
+			webcam_name: 'r200_nav', /* r200_customer */
+			
+			dynamic_services : [
+				{'service_name':'/keylo_api/locker/do_distribute', 'message_type':'keylo_api/DoDistributeLocker'},
+			],
+			
+			dynamic_topics : [
+				{'topic_name':'/keylo_api/locker/count', 'message_type':'std_msgs/Int8', 'event_name':'TestCountLocker'},
+			],
+			
+			TestCountLocker:function(data)
+			{
+				alert(data);
+			},
+			
+			
+			/* connexion to ROS */
+			onRobotConnexionError: function(data){
+				$('#connection').removeClass('battery-ok battery-mid battery-ko blinking');
+				$('#connection').addClass('battery-ko blinking');
+			},
+			onRobotConnexionOpen: function(data){					   
+			   $('#connection').removeClass('battery-ok battery-mid battery-ko blinking');
+			   $('#connection').addClass('battery-ok');
+			},
+			onRobotConnexionClose: function(data){
+			   $('#connection').removeClass('battery-ok battery-mid battery-ko blinking');
+			   $('#connection').addClass('battery-ko blinking');
+			},
+			
+			/* Battery */
+			onBatteryStateChange: function(data){
+				if (data>0)
+				{
+					$('#battery i').removeClass('fa-battery-0 fa-battery-1 fa-battery-2 fa-battery-3 fa-battery-4');
+					$('#battery').removeClass('battery-ko blinking battery-ok battery-mid');
+					if (data < 15)
+					{
+						$('#battery i').addClass('fa-battery-0');
+						$('#battery').addClass('battery-ko blinking');
+					}
+					else if (data <= 25)
+					{
+						$('#battery i').addClass('fa-battery-1');
+						$('#battery').addClass('battery-ko');
+					}
+					else if (data <= 50)
+					{
+						$('#battery i').addClass('fa-battery-2');
+						$('#battery').addClass('battery-mid');
+					}
+					else if (data <= 75)
+					{
+						$('#battery i').addClass('fa-battery-3');
+						$('#battery').addClass('battery-ok');
+					}
+					else
+					{
+						$('#battery i').addClass('fa-battery-4');
+						$('#battery').addClass('battery-ok');
+					}
+				}
+			},
+			
+			onArrivedToBox: function(data) {
+				alert('I have Arrived');
+			},
+			onArrivedToDestination: function(data) {
+			},
+			
+			onMapIsLoaded: function(data){
+				wycaApi.MapGetHTML(function(result) {
+						$('#map_container').html(result);
+				});
+			},
+			onMapRouteClick: function(data){
+				wycaApi.RobotMoveTo({'x':data.x, 'y':data.y, 'theta':0 });
+			},
+			onMapBoxClick: function(data){
+				wycaApi.RobotMoveToBox(data, function(result) {
+					console.log(result);
+				});
+			},
+			
+			
+			/* WebRTC */
+			onChannelOpen: function () { 
+				$('#mCallInProgress').hide();
+				$('#mCallInProgressFromUs').hide();
+			},
+			onVideoAdded: function (nick, video) { 
+				$('#webcam_operateur').html(''); // We clean div before add new video
+				var remotes = document.getElementById('webcam_operateur');
+				remotes.appendChild(video);
+				video.oncontextmenu = function () { return false; };
+				$('#mCallInProgress').hide();
+			},
+			onVideoRemoved: function (nick, video){
+				$('#webcam_operateur').html('');
+			},
+			onLostConnection: function (){
+				$('#mConexionLost').show();
+			},
+			onRestoreConnection: function (){
+				$('#mConexionLost').hide();
+			},
+			onStartSessionClose: function (){
+				$('#mClossingSession').show();
+			},
+			onSessionClosed: function (){
+				$('#mCallInProgress').hide();
+				$('#mCallInProgressFromUs').hide();
+				$('#mClossingSession').hide();
+				$('#mConexionLost').hide();
+				in_visio = false;
+			},
+			onNewServerMessage: function (message){
+				// StartCall|Roomrobot_demo
+				if (message != '')
+				{
+					data = message.data.split('|')
+					switch(data[0])
+					{
+						case 'StartCall':
+							if (!in_visio)
+							{
+								wycaApi.SetRoom(data[1]);
+								in_visio = true;
+								$('#mCallInProgress').show();
+								wycaApi.StartWebRTC(true);
+								console.log('start webrtc');
+							}
+							break;
+						case 'CloseSession':
+							if (!in_visio)
+								$('#mCallInProgress').hide();
+							else
+							{
+								$('#mClossingSession').show();
+							}
+							break;
+					}
+				}
+			},
+			onEquipmentError: function(){
+				wycaApi.StartCloseWebRTC();
+				alert('No webcam or microphone');
+			},
+			onNewWebRTCMessage: function(data){
+				
+			},
+		});
+		
+		
+		wycaApi.init();
+		
+		$('#bStartPersonFolloxer').click(function(e) {
+            e.preventDefault();
+			
+			wycaApi.CallDynamiqueService('/keylo_api/locker/do_distribute', {}, function(result) { console.log(result); });
+			
+        });
+		
+		$('#bOpenMap').click(function(e) {
+            e.preventDefault();
+			$('#popupMap').show();
+			wycaApi.MapInit(1920, 800);
+        });
+		
+		
+		$('#bGotoBox1').click(function(e) {
+            e.preventDefault();
+			
+			wycaApi.RobotMoveToBox('box1', function(result) {
+				console.log(result);
+			});
+			
+        });
+		$('#bGotoBox2').click(function(e) {
+            e.preventDefault();
+			
+			wycaApi.RobotMoveToBox('box2', function(result) {
+				console.log(result);
+			});
+			
+        });
+		
+		
+		$('#bStartNewsApp').click(function(e) {
+            e.preventDefault();
+			$('#popupNews').show();
+        });
+		
+		$('#bClosePopupNews').click(function(e) {
+            e.preventDefault();
+			$('#popupNews').hide();
+        });
+		
+		$('#bOpenMap').click(function(e) {
+            e.preventDefault();
+			$('#popupMap').show();
+        });
+		
+		$('#bClosePopupMap').click(function(e) {
+            e.preventDefault();
+			$('#popupMap').hide();
+        });
+		
+    });
+	</script>
+    
+</head>
+<body>
+
+	<img src="assets/Ben-Gurion_University_of_the_Negev.png" id="logo_bgu" />
+	<img src="assets/wyca-bleu.png" id="logo_wyca" />
+    
+    <div style="clear:both;"></div>
+    
+    <h1>What would you like to do?</h1>
+    
+    <div id="robotInfos">
+        <span id="connection" class=""><i class="fa fa-wifi"></i></span>
+        <span id="battery" class="battery-ko blinking"><i class="fa fa-battery-0" aria-hidden="true"></i></span>
+	</div>
+    
+    <div id="webcam_operateur">
+    
+    </div>
+        
+    <div class="container">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+        	<div class="row">
+                <div class="col-md-6">
+                	<div class="row">
+                        <div class="col-md-6"><a href="#" id="bGotoBox1" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Living room</a></div>
+                        <div class="col-md-6"><a href="#" id="bGotoBox2" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Bedroom</a></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" id="bStartCall" class="btn btn-primary btn-big"><i class="fa fa-film"></i>Call</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#" id="bOpenMap" class="btn btn-primary btn-big">Open map</a>
+                    <a href="#" id="bStartNewsApp" class="btn btn-primary btn-big">news</a>
+                </div>
+                <div class="col-md-6">
+                	<div class="row">
+                        <div class="col-md-6"><a href="#" id="bStartPersonFolloxer" class="btn btn-primary btn-big"><i class="fa fa-play"></i>Start person<br />follower</a></div>
+                        <div class="col-md-6"><a href="#" id="bStopPersonFolloxer" class="btn btn-primary btn-big"><i class="fa fa-stop"></i>Stop person<br />follower</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div> 
+    
+    <div id="popupNews" class="full-screen popup">
+        <div class="notvisible"></div>
+        <div class="message" style="width:90%;">
+        	<a href="#" class="bClose" id="bClosePopupNews"><i class="fa fa-times"></i></a>
+            <iframe src="https://www.wyca-solutions.com/developers"></iframe>
+        </div>
+    </div>
+    <div id="popupMap" class="full-screen popup">
+        <div class="notvisible"></div>
+        <div class="message" style="width:90%;">
+        	<a href="#" class="bClose" id="bClosePopupMap"><i class="fa fa-times"></i></a>
+            <div id="map_container">
+            
+            </div>
+        </div>
+    </div>
+    
+
+    <div id="mCallInProgress" class="full-screen popup">
+        <div class="notvisible"></div>
+        <div class="message">
+            <div>Call in progress</div>
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+    </div>
+    <div id="mConexionLost" class="full-screen popup">
+        <div class="notvisible"></div>
+        <div class="message">
+            <div>Connexion lost, wait for reconnexion</div>
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+    </div>
+    <div id="mClossingSession" class="full-screen popup">
+        <div class="notvisible"></div>
+        <div class="message">
+            <div>Closing the session</div>
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+    </div>   
+
+</body>
+</html>
