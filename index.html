@@ -14,7 +14,7 @@
 	<script src="extern/roslib.js"></script>
     <script src="https://www.wyca-solutions.com/API/webrtc.wyca2.min.js"></script>
     <script src="https://www.wyca-solutions.com/API/wyca_api.latest.min.php?id_site=34&api_key=rFerfgt16sfSVEfs6w18sdvsrWSXQSFQv6165wsf"></script>
-    
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script src="https://www.wyca-solutions.com/demo_bgu/js/bootstrap.js"></script>
     
     <style>
@@ -239,7 +239,7 @@
 			wycaApi.MapInit(1920, 800);
         });
 		
-		
+		// 'Go to Living room' command
 		$('#bGotoBox1').click(function(e) {
             e.preventDefault();
 			
@@ -248,10 +248,33 @@
 			});
 			
         });
+
+		// 'Go to Bedroom' command
+		$('#bGotoBox3').click(function(e) {
+            e.preventDefault();
+			
+			wycaApi.RobotMoveToBox('box3', function(result) {
+				console.log(result);
+			});
+			
+        });
+
+		// 'Go to Corridor' command
 		$('#bGotoBox2').click(function(e) {
             e.preventDefault();
 			
 			wycaApi.RobotMoveToBox('box2', function(result) {
+				console.log(result);
+			});
+			
+        });
+
+
+		// 'Go to Balcony' command
+		$('#bGotoBox8').click(function(e) {
+            e.preventDefault();
+			
+			wycaApi.RobotMoveToBox('box8', function(result) {
 				console.log(result);
 			});
 			
@@ -267,7 +290,32 @@
             e.preventDefault();
 			$('#popupNews').hide();
         });
+
+
+		// navigating with voice
+		$('#bStartVoiceApp').click(function(e) {
+            e.preventDefault();
+			$('#voiceCommand').show();
+        });
 		
+		$('#bCloseVoiceApp').click(function(e) {
+            e.preventDefault();
+			$('#voiceCommand').hide();
+        });
+
+
+		// navigating with steering
+		$('#bStartSteeringApp').click(function(e) {
+            e.preventDefault();
+			$('#steering').show();
+        });
+		
+		$('#bStartSteeringApp').click(function(e) {
+            e.preventDefault();
+			$('#steering').hide();
+        });
+		
+
 		$('#bOpenMap').click(function(e) {
             e.preventDefault();
 			$('#popupMap').show();
@@ -289,7 +337,7 @@
     
     <div style="clear:both;"></div>
     
-    <h1> Hi! What would you like to do?</h1>
+    <h1>What would you like to do?</h1>
     
     <div id="robotInfos">
         <span id="connection" class=""><i class="fa fa-wifi"></i></span>
@@ -306,23 +354,28 @@
         	<div class="row">
                 <div class="col-md-6">
                 	<div class="row">
-                        <div class="col-md-6"><a href="#" id="bGotoBox1" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Living room</a></div>
-                        <div class="col-md-6"><a href="#" id="bGotoBox2" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Bedroom</a></div>
+                        <div class="col-md-6"><a href="#" id="bGotoBox1" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Go to <br />Living room</a></a></div>
+						<div class="col-md-6"><a href="#" id="bGotoBox3" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Go to <br />Bedroom</a></div>
+						<div class="col-md-6"><a href="#" id="bGotoBox2" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Go to <br />Corridor</a></div>
+						<div class="col-md-6"><a href="#" id="bGotoBox8" class="btn btn-primary btn-big"><i class="fa fa-map-pin"></i>Go to <br />Balcony</a></div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <a href="#" id="bStartCall" class="btn btn-primary btn-big"><i class="fa fa-film"></i>Call</a>
+					<a href="#" id="bOpenMap" class="btn btn-primary btn-big"><i class='fas fa-map-marked-alt' style='font-size:36px'></i>Navigate with map</a>
+					<a href="#" id="bStartVoiceApp" class="btn btn-primary btn-big"><i class='fas fa-microphone-alt' style='font-size:36px'></i>Navigate with voice</a>
+					<a href="#" id="bStartSteeringApp" class="btn btn-primary btn-big"><i class='fas fa-directions' style='font-size:36px'></i>Navigate with Steering</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a href="#" id="bOpenMap" class="btn btn-primary btn-big">Open map</a>
-                    <a href="#" id="bStartNewsApp" class="btn btn-primary btn-big">news</a>
+					<a href="#" id="bStartCall" class="btn btn-primary btn-big">Make a video call</a>
+                    <a href="#" id="bStartNewsApp" class="btn btn-primary btn-big">Enjoy some Entertainment</a>
                 </div>
                 <div class="col-md-6">
                 	<div class="row">
-                        <div class="col-md-6"><a href="#" id="bStartPersonFolloxer" class="btn btn-primary btn-big"><i class="fa fa-play"></i>Start person<br />follower</a></div>
-                        <div class="col-md-6"><a href="#" id="bStopPersonFolloxer" class="btn btn-primary btn-big"><i class="fa fa-stop"></i>Stop person<br />follower</a></div>
+                        <div class="col-md-6"><a href="#" id="bStartPersonFolloxer" class="btn btn-primary btn-big"><i class='fas fa-ambulance' style='font-size:50px'></i>Emergency<br />services</a></div>
+						<div class="col-md-6"><a href="#" id="bStopPersonFolloxer" class="btn btn-primary btn-big"><i class="fa fa-stop"></i>Charge<br />the robot</a></div>
+						
                     </div>
                 </div>
             </div>
