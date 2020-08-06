@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="js/roslib.js"></script>
+
+<link rel="stylesheet" href="css/LOA_highLOT_high.css">
+
+<title>LOA_highLOT_high</title>
+
+<style>
+
+</style>
+
+</head>
+
+<body>
+<h1>
+	<div id="goback_btn" onclick="window.history.back()"> </div>
+	<span class="mytitle">MRP</span> 
+</h1>
+<hr/>
+
+<!--Left column-->
+<div class="row">
+	<div class="column" style="float: left; width: 15%; padding:5px">
+
+		<img class="robot_img" src="assets/wyca.png"/>
+        <img id="b25" class="battery_img" src="assets/battery_25.png" style="display:none"/>
+        <img id="b50" class="battery_img" src="assets/battery_50.png" style="display:none"/>
+        <img id="b75" class="battery_img" src="assets/battery_75.png" style="display:none"/>
+        <img id="b100" class="battery_img" src="assets/battery_100.png" />
+        
+        <img id="wifi_on" class="connection_img" src="assets/wifi_on.png"/>
+        <img id="wifi_off" class="connection_img" src="assets/wifi_off.png" style="display:none"/>
+        <img id="speedometer" class="speedometer_img" src="assets/speedometer.png"/>
+
+  	</div>
+  
+    
+
+
+
+    <!--Middle column-->
+    <div class="column" style="float: left; width: 50%; padding:5px">
+
+      <!--
+<img id="front_cam_canvas" src="http://132.73.207.247:8080/stream?topic=/camera_customer/color/image_raw&type=mjpeg&width=900&height=600"/>
+        <img id="back_cam_canvas" src="http://132.73.207.247:8080/stream?topic=/camera_bottom_front/image_raw&type=mjpeg&width=300&height=200"/>
+      -->
+
+		<img id="front_cam_canvas" src="http://172.16.176.19:8080/stream?topic=/camera_nav/color/rotated/image_raw&type=mjpeg&width=900&height=600"/>
+        <!--img id="back_cam_canvas" src="http://132.73.207.247:8080/stream?topic=/camera_nav/color/image_raw&type=mjpeg&width=200&height=300"/> -->
+
+      </div>
+
+
+
+
+
+      <!--Right column-->
+        
+
+        <!--Client video setting-->
+
+    <div id="container">
+  <video autoplay="true" id="clientVideoElement">
+  
+  </video>
+</div>
+
+<script>
+var video = document.querySelector("#clientVideoElement");
+
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(function (stream) {
+      video.srcObject = stream;
+    })
+    .catch(function (err0r) {
+      console.log("Something went wrong!");
+    });
+}
+
+</script> 
+
+		    <img class="button_img" id="up" src="assets/up.png"  />
+        <img class="button_img" id="left" src="assets/left.png"/>
+        <img class="button_img" id="stop" src="assets/stop.png"/>
+        <img class="button_img" id="right" src="assets/right.png"/>
+        <img class="button_img" id="down" src="assets/down.png"/>
+
+        <a href="#" class="myButton1" id="locationbtn1">location1</a>
+        <a href="#" class="myButton2"id="locationbtn2" >location2</a>
+        <a href="#" class="myButton3"id="locationbtn3">location3</a>
+        <a href="#" class="myButton4" id="locationbtn">location4</a>
+
+        
+        <!--a class="modeArticle"><h2>operating mode</h2></a>-->
+        
+  </div>
+
+  <div class="operatingMode">
+    <h2 id="mode"></h2>
+  </div>
+
+
+  <article>
+    <h2>Robot feedback:</h2>
+  </article>
+
+  <div class="robotFeedback">
+    <h2 id="outputFeedback"></h2>
+  </div>
+
+  <div class="speedcasing">
+    <h3 id="robotspeed"></h3>
+  </div>
+
+</div>
+
+
+
+<!-- Need to put it here, js requires all DOM to load first -->
+<script type="text/javascript" src="js/LOA_highLOT_high.js"></script>
+
+</body>
+</html>
