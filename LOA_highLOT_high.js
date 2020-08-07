@@ -1,7 +1,7 @@
 var toggleBtn, backview, fw, bw, left, right, stp;
 var fireRate = 100, fireInterval=null;
 var bat_state;
-var locate1, locate2;
+var livingroom, bedroom, diningroom, kitchen, chargingpt;
 var theX=0, theY=0, theZ=0;
 var Rfeedback;
 var RposeX;
@@ -14,7 +14,7 @@ var speedmessage;
 
 	var ros = new ROSLIB.Ros({
 		//url : 'ws://132.73.207.247:9090'
-		url : 'ws://172.16.176.19:9090'
+		url : 'ws://192.168.0.100:9090'
 	});
 
 	ros.on('connection', function(){
@@ -84,11 +84,11 @@ var speedmessage;
 	  document.getElementById("mode").innerHTML="Operating mode: Autonomous";
 
 
-function gotoPose1() {
+function gotoLivingroom() {
 
-	theX= 5.87;//3.89; //1.596
-    theY= 7.9; //5.02
-    theZ= 3.08; //0.00
+	theX= 7.13;//5.87;//3.89; //1.596
+    theY= 5.84;//; //5.02
+    theZ= 1.48; //0.00
 		   
  
            var d = new Date();
@@ -98,7 +98,7 @@ function gotoPose1() {
  
            var pose = {
                position: { x: theX, y: theY, z: 0.0 },
-               orientation: { x: 0.0, y: 0.0, z: theZ, w: 0.0 }
+               orientation: { x: 0.0, y: 0.0, z: theZ, w: 2.0 }
            };
           
            var header = {
@@ -106,33 +106,40 @@ function gotoPose1() {
                stamp: {sec: s, nsec: ns},
                frame_id: "map"
            };
-           console.log(pose);
-           pose_listener.publish({ header, pose });
+           //console.log(pose);
+		   pose_listener.publish({ header, pose });
 
 		
 		// feedback if destination 1 is reached
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
-		if (RposeX>=5.83 && RposeX<=5.92){
-			console.log(message.x);		
-			document.getElementById("outputFeedback").innerHTML="Currently in the destination requested";
+		if (RposeX>=7.09 && RposeX<=7.17){
+			//console.log(message.x);		
+			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the living room";
 		}
 		else {
-		document.getElementById("outputFeedback").innerHTML="On the way to the requested destination";
+		document.getElementById("outputFeedback").innerHTML="On the way to the living room because I found a feasible path";
 		}
+	});
+
+	move_base_goal_status_listener.subscribe(function(message){
+		movebaseState = message.status_list[0].status;
+		console.log(movebaseState);
+
+		if (movebaseState==4 || movebaseState==5){
+			document.getElementById("outputFeedback").innerHTML="Cannot get to the living room because I did not find a feasible path";
+		}
+
 	});
 }
 
 
-function gotoPose2() {
+function gotoBedroom() {
 
-	theX= 5.92;//6.59;//5.92;//7.99;//1.01;
-    theY= 3.99;//3.31;//4.95; //4.82;
-    theZ= -4.13; //2.15; //0.63;//0.97;
+	theX= 7.3;//5.92;//6.59;//5.92;//7.99;//1.01;
+    theY= 10.63;//3.99;//3.31;//4.95; //4.82;
+    theZ= 2.41;//-4.13; //2.15; //0.63;//0.97;
 
-
-
- 
            var d = new Date();
                var s = Math.floor(d.getTime() / 1000);
                var ns = d * 1000 - s * 1000000;
@@ -140,7 +147,7 @@ function gotoPose2() {
  
            var pose = {
                position: { x: theX, y: theY, z: 0.0 },
-               orientation: { x: 0.0, y: 0.0, z: theZ, w: 3.0 }
+               orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
            };
           
            var header = {
@@ -148,42 +155,175 @@ function gotoPose2() {
                stamp: {sec: s, nsec: ns},
                frame_id: "map"
            };
-           console.log(pose);
+           //console.log(pose);
            pose_listener.publish({ header, pose });
 
 	   // feedback if destination 2 is reached (using pose)
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
-		if (RposeX>=7.94 && RposeX<=8.05){
-			console.log(message.x);		
-			document.getElementById("outputFeedback").innerHTML="Location1 reached";
-			document.getElementById("outputFeedback").innerHTML="On the way to destination you requested";
+		if (RposeX>=6.9 && RposeX<=7.7){
+			//console.log(message.x);		
+			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the bedroom";
 		}
 
 		else {
-		document.getElementById("lblFeedback").value="Feeback from robot";
+		document.getElementById("outputFeedback").value="On the way to the bedroom because I found a feasible path";
 		}
-	});
+	});	
 
-	// feedback if destination 2 is reached (using move_base_goal)
-	/*
-	    move_base_goal_status_listener.subscribe(function(message){
+	move_base_goal_status_listener.subscribe(function(message){
 		movebaseState = message.status_list[0].status;
 		console.log(movebaseState);
 
-		if (movebaseState==3){	
-			document.getElementById("lblFeedback").value="Location2 reached";
+		if (movebaseState==4 || movebaseState==5){
+			document.getElementById("outputFeedback").innerHTML="Cannot get to the living room because I did not find a feasible path";
 		}
 
-    		else if (movebaseState==1){
-		document.getElementById("lblFeedback").value="Mission accepted, going ...";
-		}
+	});
+}
 
+function gotoDiningroom() {
+
+	theX= 4.89;//5.87;//3.89; //1.596
+	theY= 6.2;//; //5.02
+	theZ= 1.84; //0.00	   
+ 
+		   var d = new Date();
+			   var s = Math.floor(d.getTime() / 1000);
+			   var ns = d * 1000 - s * 1000000;
+		   var gotomsg_sequence=0;
+ 
+		   var pose = {
+			   position: { x: theX, y: theY, z: 0.0 },
+			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
+		   };
+		  
+		   var header = {
+			   seq: gotomsg_sequence++,
+			   stamp: {sec: s, nsec: ns},
+			   frame_id: "map"
+		   };
+		   //console.log(pose);
+		   pose_listener.publish({ header, pose });
+
+		
+		// feedback if destination 1 is reached
+	   goal_status_listener.subscribe(function(message){
+		RposeX = message.x
+		if (RposeX>=4.85 && RposeX<=4.93){
+			//console.log(message.x);		
+			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the dining room";
+		}
 		else {
-		document.getElementById("lblFeedback").value="";
+		document.getElementById("outputFeedback").innerHTML="On the way to the dining room because I found a feasible path";
 		}
-	});*/
-	
+	});
+
+	move_base_goal_status_listener.subscribe(function(message){
+		movebaseState = message.status_list[0].status;
+		console.log(movebaseState);
+
+		if (movebaseState==4 || movebaseState==5){
+			document.getElementById("outputFeedback").innerHTML="Cannot get to the living room because I didn't find a feasible path";
+		}
+
+	});
+}
+
+
+function gotoKitchen() {
+	theX= 3.69;//5.87;//3.89; //1.596
+	theY= 9.55;//; //5.02
+	theZ= 1.61; //0.00
+ 
+		   var d = new Date();
+			   var s = Math.floor(d.getTime() / 1000);
+			   var ns = d * 1000 - s * 1000000;
+		   var gotomsg_sequence=0;
+ 
+		   var pose = {
+			   position: { x: theX, y: theY, z: 0.0 },
+			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.5 }
+		   };
+		  
+		   var header = {
+			   seq: gotomsg_sequence++,
+			   stamp: {sec: s, nsec: ns},
+			   frame_id: "map"
+		   };
+		   //console.log(pose);
+		   pose_listener.publish({ header, pose });
+
+		
+		// feedback if destination 1 is reached
+	   goal_status_listener.subscribe(function(message){
+		RposeX = message.x
+		if (RposeX>=3.65 && RposeX<=3.73){
+			//console.log(message.x);		
+			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently facing the kitchen";
+		}
+		else {
+		document.getElementById("outputFeedback").innerHTML="On the way to the kitchen because I found a feasible path";
+		}
+	});
+
+	move_base_goal_status_listener.subscribe(function(message){
+		movebaseState = message.status_list[0].status;
+		console.log(movebaseState);
+
+		if (movebaseState==4 || movebaseState==5){
+			document.getElementById("outputFeedback").innerHTML="Cannot get to the living room because I didn't find a feasible path";
+		}
+
+	});
+}
+
+
+function gotoCharging() {
+	theX= 8.96;//5.87;//3.89; //1.596
+	theY= 5.81;//; //5.02
+	theZ= -0.06; //0.00
+ 
+		   var d = new Date();
+			   var s = Math.floor(d.getTime() / 1000);
+			   var ns = d * 1000 - s * 1000000;
+		   var gotomsg_sequence=0;
+ 
+		   var pose = {
+			   position: { x: theX, y: theY, z: 0.0 },
+			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
+		   };
+		  
+		   var header = {
+			   seq: gotomsg_sequence++,
+			   stamp: {sec: s, nsec: ns},
+			   frame_id: "map"
+		   };
+		   //console.log(pose);
+		   pose_listener.publish({ header, pose });
+
+		
+		// feedback if destination 1 is reached
+	   goal_status_listener.subscribe(function(message){
+		RposeX = message.x
+		if (RposeX>=8.9 && RposeX<=9.00){
+			//console.log(message.x);		
+			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently at my charging point";
+		}
+		else {
+		document.getElementById("outputFeedback").innerHTML="On the way to charge because I found a feasible path";
+		}
+	});
+
+	move_base_goal_status_listener.subscribe(function(message){
+		movebaseState = message.status_list[0].status;
+		console.log(movebaseState);
+
+		if (movebaseState==4 || movebaseState==5){
+			document.getElementById("outputFeedback").innerHTML="Cannot get to my chargingpt because I didn't find a feasible path";
+		}
+
+	});
 }
 
 
@@ -227,8 +367,11 @@ bw = document.getElementById("down");
 left = document.getElementById("left");
 right = document.getElementById("right");
 stp = document.getElementById("stop");
-locate1 = document.getElementById("locationbtn1");
-locate2 = document.getElementById("locationbtn2");
+livingroom = document.getElementById("livingroombtn");
+bedroom = document.getElementById("bedroombtn");
+diningroom = document.getElementById("diningroombtn");
+kitchen = document.getElementById("kitchenbtn");
+chargingpt = document.getElementById("chargingptbtn");
 myVideo = document.getElementById("myVideocanvas");
 //Rfeedback = document.getElementById("lblFeedback");
 
@@ -251,11 +394,14 @@ right.addEventListener("mouseup", stop);
 stp.addEventListener("mousedown", function(){start(0,0.0);},false);
 stp.addEventListener("mousedown", modeChangeToManual);
 stp.addEventListener("mouseup", modeChangeToAuto);
-stp.addEventListener("mouseup", stop);
+//stp.addEventListener("mouseup", stop);
 
 
-locate1.addEventListener("click", function(){gotoPose1();},false);
-locate2.addEventListener("click", function(){gotoPose2();},false);
+livingroom.addEventListener("click", function(){gotoLivingroom();},false);
+bedroom.addEventListener("click", function(){gotoBedroom();},false);
+diningroom.addEventListener("click", function(){gotoDiningroom();},false);
+kitchen.addEventListener("click", function(){gotoKitchen();},false);
+chargingpt.addEventListener("click", function(){gotoCharging();},false);
 
 
 window.setInterval(function(){
@@ -291,18 +437,20 @@ window.setInterval(function(){
 // speed display
 speed_listener.subscribe(function(message){
 	speedvalue = (message.linear.x+message.angular.z);
-	console.log(speedvalue);
+	//console.log(speedvalue);
 	//document.getElementById("robotspeed").innerHTML=speedvalue;
 });
-if(speedvalue<=0.1){
+if(speedvalue<=-0.05){
 	speedmessage="low";
-	console.log(speedmessage);
+	document.getElementById("robotspeed").innerHTML="very low";
+}
+else if(speedvalue>-0.05 && speedvalue<=0.07){
 	document.getElementById("robotspeed").innerHTML="low";
 }
-else if(speedvalue>0.1 && speedvalue<=0.4){
+else if(speedvalue>0.07 && speedvalue<=0.6){
 	document.getElementById("robotspeed").innerHTML="med";
 }
-else if(speedvalue>0.4){
+else if(speedvalue>0.6){
 	document.getElementById("robotspeed").innerHTML="high";
 }
 else{
