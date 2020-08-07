@@ -195,11 +195,11 @@ body {
 	background-color: #666;
   }
 
-/*location button 1*/
-.myButton1 {
+/*livingroom button */
+.livingroomButton {
 	position:relative;
-	top:300px;
-	left:-350px;
+	top:200px;
+	left:-370px;
 	box-shadow: 3px 4px 0px 0px #899599;
 	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
 	background-color:#ededed;
@@ -214,21 +214,21 @@ body {
 	text-decoration:none;
 	text-shadow:0px 1px 0px #e1e2ed;
 }
-.myButton1:hover {
+.livingroomButton:hover {
 	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
 	background-color:#bab1ba;
 }
-.myButton1:active {
+.livingroomButton:active {
 	position:relative;
-	top:302px;
+	top:202px;
 }
 
 
-/*location buttton 2*/
-.myButton2 {
+/*bedroom buttton*/
+.bedroomButton {
 	position:relative;
 	top:263px;
-	left:190px;
+	left:100px;
 	box-shadow: 3px 4px 0px 0px #899599;
 	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
 	background-color:#ededed;
@@ -243,49 +243,20 @@ body {
 	text-decoration:none;
 	text-shadow:0px 1px 0px #e1e2ed;
 }
-.myButton2:hover {
+.bedroomButton:hover {
 	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
 	background-color:#bab1ba;
 }
-.myButton2:active {
+.bedroomButton:active {
 	position:relative;
 	top:265px;
 }
 
-/*location button 3*/
-.myButton3 {
-	position:relative;
-	top:260px;
-	left:210px;
-	box-shadow: 3px 4px 0px 0px #899599;
-	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
-	background-color:#ededed;
-	border-radius:15px;
-	border:1px solid #d6bcd6;
-	display:inline-block;
-	cursor:pointer;
-	color:#3a8a9e;
-	font-family:Arial;
-	font-size:17px;
-	padding:7px 25px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #e1e2ed;
-}
-.myButton3:hover {
-	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
-	background-color:#bab1ba;
-}
-.myButton3:active {
+/*diningroom button */
+.chargingptButton {
 	position:relative;
 	top:262px;
-}
-
-
-/*location button 4*/
-.myButton4 {
-	position:relative;
-	top:260px;
-	left:230px;
+	left:115px;
 	box-shadow: 3px 4px 0px 0px #899599;
 	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
 	background-color:#ededed;
@@ -300,13 +271,70 @@ body {
 	text-decoration:none;
 	text-shadow:0px 1px 0px #e1e2ed;
 }
-.myButton4:hover {
+.chargingptButton:hover {
 	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
 	background-color:#bab1ba;
 }
-.myButton4:active {
+.chargingptButton:active {
 	position:relative;
-	top:342px;
+	top:264px;
+}
+
+
+/*kitchen button 4*/
+.kitchenButton {
+	position:relative;
+	top:262px;
+	left:130px;
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:15px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	color:#3a8a9e;
+	font-family:Arial;
+	font-size:17px;
+	padding:7px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+}
+.kitchenButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+.kitchenButton:active {
+	position:relative;
+	top:264px;
+}
+
+/*charging button */
+.diningroomButton {
+	position:relative;
+	top:160px;
+	left:80px;
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:15px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	color:#3a8a9e;
+	font-family:Arial;
+	font-size:17px;
+	padding:7px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+}
+.diningroomButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+.diningroomButton:active {
+	position:relative;
+	top:162px;
 }
 
 .modeArticle {
