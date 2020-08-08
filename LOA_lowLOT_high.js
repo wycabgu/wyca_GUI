@@ -30,7 +30,7 @@ var speedmessage;
 	   		document.getElementById("b25").style.display = "block";
 		document.getElementById("b50").style.display = "none";
 		document.getElementById("b75").style.display = "none";
-		document.getElementById("b100").style.display = "none";
+		document.getElementById("b100").style.display = "none";	 
 	 });
 
 	  ros.on('close', function() {
@@ -40,7 +40,7 @@ var speedmessage;
 	   		document.getElementById("b25").style.display = "block";
 		document.getElementById("b50").style.display = "none";
 		document.getElementById("b75").style.display = "none";
-		document.getElementById("b100").style.display = "none";
+		document.getElementById("b100").style.display = "none";	 
 	 });
 
 	  cmd_vel_listener = new ROSLIB.Topic({
@@ -77,11 +77,11 @@ var speedmessage;
 	  speed_listener = new ROSLIB.Topic ({
 		ros : ros,
 		name :"/cmd_vel" ,
-		messageType :'geometry_msgs/Twist'
+		messageType :'geometry_msgs/Twist' 
 	  });
 
 	  document.getElementById("outputFeedback").innerHTML="Currently in standby mode, waiting for instruction";
-	  document.getElementById("mode").innerHTML="Operating mode: Autonomous";
+	  document.getElementById("mode").innerHTML="Operating mode: Manual";
 
 
 function gotoLivingroom() {
@@ -89,18 +89,18 @@ function gotoLivingroom() {
 	theX= 7.13;//5.87;//3.89; //1.596
     theY= 5.84;//; //5.02
     theZ= 1.48; //0.00
-
-
+		   
+ 
            var d = new Date();
                var s = Math.floor(d.getTime() / 1000);
                var ns = d * 1000 - s * 1000000;
 	       var gotomsg_sequence=0;
-
+ 
            var pose = {
                position: { x: theX, y: theY, z: 0.0 },
                orientation: { x: 0.0, y: 0.0, z: theZ, w: 2.0 }
            };
-
+          
            var header = {
                seq: gotomsg_sequence++,
                stamp: {sec: s, nsec: ns},
@@ -109,12 +109,12 @@ function gotoLivingroom() {
            //console.log(pose);
 		   pose_listener.publish({ header, pose });
 
-
+		
 		// feedback if destination 1 is reached
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
 		if (RposeX>=7.09 && RposeX<=7.17){
-			//console.log(message.x);
+			//console.log(message.x);		
 			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the living room";
 		}
 		else {
@@ -144,12 +144,12 @@ function gotoBedroom() {
                var s = Math.floor(d.getTime() / 1000);
                var ns = d * 1000 - s * 1000000;
 	       var gotomsg_sequence=0;
-
+ 
            var pose = {
                position: { x: theX, y: theY, z: 0.0 },
                orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
            };
-
+          
            var header = {
                seq: gotomsg_sequence++,
                stamp: {sec: s, nsec: ns},
@@ -162,14 +162,14 @@ function gotoBedroom() {
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
 		if (RposeX>=6.9 && RposeX<=7.7){
-			//console.log(message.x);
+			//console.log(message.x);		
 			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the bedroom";
 		}
 
 		else {
 		document.getElementById("outputFeedback").innerHTML="On the way to the bedroom because I found a feasible path";
 		}
-	});
+	});	
 
 	move_base_goal_status_listener.subscribe(function(message){
 		movebaseState = message.status_list[0].status;
@@ -190,18 +190,18 @@ function gotoDiningroom() {
 
 	theX= 4.89;//5.87;//3.89; //1.596
 	theY= 6.2;//; //5.02
-	theZ= 1.84; //0.00
-
+	theZ= 1.84; //0.00	   
+ 
 		   var d = new Date();
 			   var s = Math.floor(d.getTime() / 1000);
 			   var ns = d * 1000 - s * 1000000;
 		   var gotomsg_sequence=0;
-
+ 
 		   var pose = {
 			   position: { x: theX, y: theY, z: 0.0 },
 			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
 		   };
-
+		  
 		   var header = {
 			   seq: gotomsg_sequence++,
 			   stamp: {sec: s, nsec: ns},
@@ -210,12 +210,12 @@ function gotoDiningroom() {
 		   //console.log(pose);
 		   pose_listener.publish({ header, pose });
 
-
+		
 		// feedback if destination 1 is reached
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
 		if (RposeX>=4.85 && RposeX<=4.93){
-			//console.log(message.x);
+			//console.log(message.x);		
 			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently in the dining room";
 		}
 		else {
@@ -239,17 +239,17 @@ function gotoKitchen() {
 	theX= 3.69;//5.87;//3.89; //1.596
 	theY= 9.55;//; //5.02
 	theZ= 1.61; //0.00
-
+ 
 		   var d = new Date();
 			   var s = Math.floor(d.getTime() / 1000);
 			   var ns = d * 1000 - s * 1000000;
 		   var gotomsg_sequence=0;
-
+ 
 		   var pose = {
 			   position: { x: theX, y: theY, z: 0.0 },
 			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.5 }
 		   };
-
+		  
 		   var header = {
 			   seq: gotomsg_sequence++,
 			   stamp: {sec: s, nsec: ns},
@@ -258,12 +258,12 @@ function gotoKitchen() {
 		   //console.log(pose);
 		   pose_listener.publish({ header, pose });
 
-
+		
 		// feedback if destination 1 is reached
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
 		if (RposeX>=3.65 && RposeX<=3.73){
-			//console.log(message.x);
+			//console.log(message.x);		
 			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently facing the kitchen";
 		}
 		else {
@@ -287,17 +287,17 @@ function gotoCharging() {
 	theX= 8.96;//5.87;//3.89; //1.596
 	theY= 5.81;//; //5.02
 	theZ= -0.06; //0.00
-
+ 
 		   var d = new Date();
 			   var s = Math.floor(d.getTime() / 1000);
 			   var ns = d * 1000 - s * 1000000;
 		   var gotomsg_sequence=0;
-
+ 
 		   var pose = {
 			   position: { x: theX, y: theY, z: 0.0 },
 			   orientation: { x: 0.0, y: 0.0, z: theZ, w: 1.0 }
 		   };
-
+		  
 		   var header = {
 			   seq: gotomsg_sequence++,
 			   stamp: {sec: s, nsec: ns},
@@ -306,12 +306,12 @@ function gotoCharging() {
 		   //console.log(pose);
 		   pose_listener.publish({ header, pose });
 
-
+		
 		// feedback if destination 1 is reached
 	   goal_status_listener.subscribe(function(message){
 		RposeX = message.x
 		if (RposeX>=8.9 && RposeX<=9.00){
-			//console.log(message.x);
+			//console.log(message.x);		
 			document.getElementById("outputFeedback").innerHTML="Stopping because I'm currently at my charging point";
 		}
 		else {
@@ -337,19 +337,6 @@ function start(linear, angular){
 
 }
 
-// operating mode functions
-function modeChangeToManual(){
-	document.getElementById("mode").innerHTML="Operating mode: Switched to Manual mode";
-}
-
-function modeChangeToAuto(){
-	document.getElementById("mode").innerHTML="Operating mode: Returned to Autonomous mode"
-}
-
-function emergencyStop(){
-	document.getElementById("mode").innerHTML="Emergency stop applied manually"
-}
-
 // move functions
 function moveForward(){
 	document.getElementById("outputFeedback").innerHTML="Moving forward because you pushed forward";
@@ -369,6 +356,10 @@ function moveRight(){
 
 function releaseMove(){
 	document.getElementById("outputFeedback").innerHTML="Stopped because you released the button"
+}
+
+function emergencyStop(){
+	document.getElementById("mode").innerHTML="Emergency stop applied manually"
 }
 
 function stop(){
@@ -405,33 +396,25 @@ myVideo = document.getElementById("myVideocanvas");
 //Rfeedback = document.getElementById("lblFeedback");
 
 fw.addEventListener("mousedown", function(){start(0.15,0.0);},false);
-fw.addEventListener("mousedown", modeChangeToManual);
-fw.addEventListener("mouseup", modeChangeToAuto);
+fw.addEventListener("mousedown", moveForward);
+fw.addEventListener("mouseup", releaseMove);
 fw.addEventListener("mouseup", stop);
-
 bw.addEventListener("mousedown", function(){start(-0.15,0.0);},false);
-bw.addEventListener("mousedown", modeChangeToManual);
-bw.addEventListener("mouseup", modeChangeToAuto);
+bw.addEventListener("mousedown", moveBackward);
+bw.addEventListener("mouseup", releaseMove);
 bw.addEventListener("mouseup", stop);
 left.addEventListener("mousedown", function(){start(0.0,0.2);},false);
-left.addEventListener("mousedown", modeChangeToManual);
-left.addEventListener("mouseup", modeChangeToAuto);
+left.addEventListener("mousedown", moveLeft);
+left.addEventListener("mouseup", releaseMove);
 left.addEventListener("mouseup", stop);
 right.addEventListener("mousedown", function(){start(0.0,-0.2);},false);
-right.addEventListener("mousedown", modeChangeToManual);
-right.addEventListener("mouseup", modeChangeToAuto);
+right.addEventListener("mousedown", moveRight);
+right.addEventListener("mouseup", releaseMove);
 right.addEventListener("mouseup", stop);
 stp.addEventListener("mousedown", function(){start(0,0.0);},false);
-stp.addEventListener("mousedown", emergencyStop);
-stp.addEventListener("mouseup", emergencyStop);
+//stp.addEventListener("mousedown", emergencyStop);
+//stp.addEventListener("mouseup", emergencyStop);
 //stp.addEventListener("mouseup", stop);
-
-
-livingroom.addEventListener("click", function(){gotoLivingroom();},false);
-bedroom.addEventListener("click", function(){gotoBedroom();},false);
-diningroom.addEventListener("click", function(){gotoDiningroom();},false);
-kitchen.addEventListener("click", function(){gotoKitchen();},false);
-chargingpt.addEventListener("click", function(){gotoCharging();},false);
 
 
 window.setInterval(function(){
@@ -486,3 +469,4 @@ else if(speedvalue>0.6){
 else{
 	document.getElementById("robotspeed").innerHTML="stopped";
 }
+
